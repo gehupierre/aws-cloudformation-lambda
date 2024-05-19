@@ -1,0 +1,57 @@
+service: publishers
+
+frameworkVersion: "3"
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  environment:
+    PUBLISHER_TABLE: ${env:PUBLISHER_TABLE}
+
+  # DynamoDB Permission
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
+
+functions:
+  api:
+    handler: src/handler.apiHandler
+  listPublishers:
+    handler: src/publishers/list.list
+    memorySize: 128
+    description: List all publishers
+    events:
+      - http:
+          path: publishers
+          method: get
+
+resources:
+  Resources:
+    PublishersDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.PUBLISHER_TABLE}
+
+# Plugins for typescript
+plugins:
+  - serverless-plugin-typescript
+  - serverless-tscpaths

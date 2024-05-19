@@ -1,0 +1,27 @@
+{
+  "name": "publishers-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "local": "serverless invoke local --function api",
+    "local:publishers": "serverless invoke local --function listPublishers",
+    "deploy": "serverless deploy"
+  },
+  "author": "Gehu Pierre",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "serverless-plugin-typescript": "^2.1.5",
+    "serverless-tscpaths": "^0.0.8",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1622.0",
+    "bluebird": "^3.7.2",
+    "serverless-http": "^3.2.0",
+    "uuid": "^9.0.1"
+  }
+}
